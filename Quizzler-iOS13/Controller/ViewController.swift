@@ -10,10 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
     
+//    @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
+    @IBOutlet weak var answer1Button: UIButton!
+    @IBOutlet weak var answer2Button: UIButton!
+    @IBOutlet weak var answer3Button: UIButton!
     
+    @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var questionPB: UIProgressView!
     
     var quizBrain = QuizBrain()
@@ -22,7 +25,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        changeQuestion()
+        changeUI()
     }
     
     @IBAction func answerButton(_ sender: UIButton) {
@@ -39,26 +42,32 @@ class ViewController: UIViewController {
             sender.backgroundColor = UIColor.red
         }
         
-        timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(clearColor), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(changeUI), userInfo: nil, repeats: true)
         quizBrain.nextQuestion()
 
 //        changeQuestion()
     }
     
    
+//
+//    func changeQuestion(){
+//        questionLabel.text = quizBrain.getQuizQuestion()
+////        questionPB.progress = Float(questionNo)/Float(quizz.count)
+//
+//    }
     
-    func changeQuestion(){
-        questionLabel.text = quizBrain.getQuizQuestion()
-//        questionPB.progress = Float(questionNo)/Float(quizz.count)
+    @objc func changeUI(){
+        answer1Button.backgroundColor = UIColor.clear
+        answer2Button.backgroundColor = UIColor.clear
+        answer3Button.backgroundColor = UIColor.clear
         
-    }
-    
-    @objc func clearColor(){
-        falseButton.backgroundColor = UIColor.clear
-        trueButton.backgroundColor = UIColor.clear
-        
+        scoreLabel.text = "Score: \(quizBrain.getScore())"
         questionLabel.text = quizBrain.getQuizQuestion()
-        questionPB.progress = quizBrain.getProgress() 
+        questionPB.progress = quizBrain.getProgress()
+        
+        answer1Button.setTitle(quizBrain.getAnswer().first, for: .normal)
+        answer2Button.setTitle(quizBrain.getAnswer()[1], for: .normal)
+        answer3Button.setTitle(quizBrain.getAnswer().last, for: .normal)
         
     }
 
